@@ -4,10 +4,14 @@
 #include <string>
 #include "json.hpp"
 #include "PID.h"
+#include <chrono>
 
 // for convenience
 using nlohmann::json;
 using std::string;
+using Clock = std::chrono::high_resolution_clock;
+using std::chrono::time_point;
+using std::chrono::duration;
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
@@ -37,8 +41,11 @@ int main() {
   /**
    * TODO: Initialize the pid variable.
    */
-
-  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
+  pid.Init(0.15, 0, 3.0);
+  time_point<Clock> previous_message_time = Clock::now();
+  int message_counter = 0;
+  
+  h.onMessage([&pid,&previous_message_time](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -64,7 +71,18 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
           
+          message_counter += 1;
+          
+          time_point<Clock> current_message_time = Clock::now();
+          double time_between_messages = duration<double, std::milli>(current_message_time - previous_message_time).count();
+          previous_message_time = current_message_time;
+
+          pid.UpdateError(cte, time_between_messages);
+          //steer_value = angle + pid.TotalError();
+          steer_value = pid.TotalError();
+          
           // DEBUG
+          std::cout << "Time between messages (ms): " << time_between_messages << "; Angle: " << angle << "; PID TotalError: " << pid.TotalError() << std::endl;
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
 
