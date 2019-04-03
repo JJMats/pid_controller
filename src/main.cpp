@@ -5,6 +5,7 @@
 #include "json.hpp"
 #include "PID.h"
 #include <chrono>
+#include <fstream>
 
 // for convenience
 using nlohmann::json;
@@ -35,13 +36,49 @@ string hasData(string s) {
 }
 
 int main() {
+  // Read gain and setup parameters from csv file
+  string line;
+  double p_term = 0.0;
+  double i_term = 0.0;
+  double d_term = 0.0;
+  double max_i_err = 0.0;
+  bool twiddle_active = false;
+  std::ifstream param_file("pid_params.txt");  
+  if(param_file.is_open()){
+    int line_count = 0;
+    while(getline(param_file, line)){
+      switch(line_count){
+        case 0:
+          p_term = std::stod(line);
+          break;
+        case 1:
+          i_term = std::stod(line);
+          break;
+        case 2:
+          d_term = std::stod(line);
+          break;
+        case 3:
+          max_i_err = std::stod(line);
+          break;
+        case 4:
+          twiddle_active = std::stoi(line);
+          break;
+      }
+      line_count += 1;
+    }
+    param_file.close();
+  }
+  
   uWS::Hub h;
 
   PID pid;
   /**
    * TODO: Initialize the pid variable.
    */
-  pid.Init(0.15, 0, 3.0);
+  //pid.Init(0.15, 0, 3.0);
+  //pid.Init(0.15, 0.01, 0.15); // This passes
+  //pid.Init(0.10, 0.05, 0.25);
+  pid.Init(p_term, i_term, d_term, max_i_err, twiddle_active);
   time_point<Clock> previous_message_time = Clock::now();
   int message_counter = 0;
   
@@ -71,7 +108,7 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
           
-          message_counter += 1;
+          //message_counter += 1;
           
           time_point<Clock> current_message_time = Clock::now();
           double time_between_messages = duration<double, std::milli>(current_message_time - previous_message_time).count();
@@ -80,6 +117,11 @@ int main() {
           pid.UpdateError(cte, time_between_messages);
           //steer_value = angle + pid.TotalError();
           steer_value = pid.TotalError();
+          if (steer_value > 1.0){
+            steer_value = 1.0;
+          }else if(steer_value < -1.0){
+            steer_value = -1.0;
+          }
           
           // DEBUG
           std::cout << "Time between messages (ms): " << time_between_messages << "; Angle: " << angle << "; PID TotalError: " << pid.TotalError() << std::endl;
