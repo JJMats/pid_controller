@@ -28,7 +28,7 @@ void PID::Init(){
    *    evaluation_steps is the quantity of steps to calculate a total error from
    */
   std::string line;
-  std::ifstream param_file("pid_params.txt");  
+  std::ifstream param_file("../res/pid_params.txt");  
   if(param_file.is_open()){
     int line_count = 0;
     while(getline(param_file, line)){
@@ -186,7 +186,7 @@ void PID::UpdateError(double cte, double diff_time, double speed) {
     // Write PID tuning results to output file for review
     std::string line;
     std::ofstream output_file;
-    output_file.open("pid_results.txt", std::ios::out | std::ios::app);
+    output_file.open("../res/pid_results.txt", std::ios::out | std::ios::app);
     if(output_file.is_open()){
       output_file << "Iteration " << update_count << ": Cumulative error: " << cumulative_err << "; Best error: " << best_err << "; P: " << p[0] << "; I: " << p[2] << "; D: " << p[1] << "\n";
       output_file.close();  

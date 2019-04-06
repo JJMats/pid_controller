@@ -18,7 +18,6 @@ class PID {
    * Initialize PID.
    * @param (Kp_, Ki_, Kd_) The initial PID coefficients
    */
-  //void Init(double Kp_, double Ki_, double Kd_, double max_i_error_, bool twiddle_active_, double initial_dp, int eval_steps);
   void Init();
   /**
    * Update the PID error variables given cross track error.
@@ -59,7 +58,6 @@ class PID {
   std::vector<double> dp;
   std::vector<double> p;
   bool index_changed;
-  //int stabilize_count;
   int stabilization_steps;
   int evaluation_steps;
   int step_count;
@@ -67,8 +65,7 @@ class PID {
   double initial_dp_p;
   double initial_dp_d;
   double initial_dp_i;
-  int last_change;
-  
+  int last_change;  
 };
 
 #endif  // PID_H
