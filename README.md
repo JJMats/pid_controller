@@ -97,9 +97,11 @@ still be compilable with cmake and make./
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
 *** Reflection
+
 The PID Controller project for the Udacity Self-Driving Car Engineer Nanodegree program was a great opportunity to practice tuning PID control algorithms and their parameters to allow a vehicle to steer itself back to the center of the lane and maintain that position while it traverses a lap around a simulated track. This is helpful for many types of control systems as they are rarely ever able to function “perfectly.”
 
 ** Implementation
+
 The PID architecture chosen for the project was a parallel PID controller, whose gain and error parameters are calculated individually and then summed to produce an output value. The difference in the commanded output value and the target value is the new calculated error that is fed back into the input of the controller to allow for continuous adjustment.
 
 The implementation began with setting the I and the D term to zero values, and then changing the <em>proportional</em> (P) term to an initial starting value. A typical approach to PID tuning is to adjust the P parameter first, and slowly increment the value up to a point at which the error is slightly overcorrected and the system becomes unstable. At this point, the D term is implemented, followed by the I term as necessary. This approach did not work well for this system.
@@ -113,6 +115,7 @@ Once a balance was achieved between the P and D terms, the <em>integral</em> (I)
 A common problem with integral gain in a PID controller is that a long-term error may allow the integral error to increase to a very large value that may take an excessively long time to decrease back to zero or may cause the system to become increasingly unstable. This is known as “integral wind-up.” To circumvent this problem, the integral error was clamped to a maximum value of +/- 5.0 (PID.cpp, code lines 97-104).
 
 ** Simulation
+
 Various methods were implemented to assist in tuning the PID parameters of the system, but it was determined that a starting point should be manually resolved. Through multiple simulations, parameters were chosen that allowed the system to traverse multiple laps around the track without leaving the road surface.
 
 After manually tuning the PID controller to a desired result, the Twiddle algorithm was implemented (PID.cpp, code lines 117-145) to facilitate PID parameter fine tuning. The implementation consisted of steps to record the total error (cumulative deviation from the target location in the center of the track for each update) of a travelled distance that was longer than one lap around the test track, make small incremental adjustments (positive and negative) to the gain terms individually, and recheck this error to determine if an improvement was made. If an improvement was calculated from the last iteration, the next term is subsequently adjusted, and the algorithm continues.
@@ -124,6 +127,7 @@ A final attempt at automatically tuning the PID parameters was to automatically 
 The latter algorithm produced similar results to Twiddle but the error did not seem to converge as rapidly in the early laps. Although, after over 30 laps of simulation, the error was nearly identical.
 
 The final parameters were:
+
 <strong>Manually Tuned:</strong>
  - P: 0.090, I: 0.009, D: 0.100
  - Notes: Smoother steering, tends to drive towards the outside edge of the lane on turn entry, lower peak steering angles
@@ -137,6 +141,7 @@ The final parameters were:
  - Notes: Finds lane center well but tends to oscillate around zero error, has frequent high angle (and high jerk) steering movements which are ramped out rapidly.
 
 ** Potential Improvements
+
 Since the error reference for the automatic parameter tuning algorithms was based upon a total calculated error over the duration of 1400 updates, the distance that the vehicle travelled in this timeframe was not always identical. This is a result of vehicle instability and associated vehicle speed adjustment. Therefore, the reference lap was not always identical, inducing an additional error into the measurement. If a start/stop waypoint could be established, this may allow for some consistency in error calculated on a per lap basis.
 
 Add throttle control to decrease the vehicle speed as error increases. This may help stabilize the steering PID controller.
