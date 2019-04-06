@@ -96,11 +96,11 @@ still be compilable with cmake and make./
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
-*** Reflection
+## Reflection
 
 The PID Controller project for the Udacity Self-Driving Car Engineer Nanodegree program was a great opportunity to practice tuning PID control algorithms and their parameters to allow a vehicle to steer itself back to the center of the lane and maintain that position while it traverses a lap around a simulated track. This is helpful for many types of control systems as they are rarely ever able to function “perfectly.”
 
-** Implementation
+# Implementation
 
 The PID architecture chosen for the project was a parallel PID controller, whose gain and error parameters are calculated individually and then summed to produce an output value. The difference in the commanded output value and the target value is the new calculated error that is fed back into the input of the controller to allow for continuous adjustment.
 
@@ -114,7 +114,7 @@ Once a balance was achieved between the P and D terms, the <em>integral</em> (I)
 
 A common problem with integral gain in a PID controller is that a long-term error may allow the integral error to increase to a very large value that may take an excessively long time to decrease back to zero or may cause the system to become increasingly unstable. This is known as “integral wind-up.” To circumvent this problem, the integral error was clamped to a maximum value of +/- 5.0 (PID.cpp, code lines 97-104).
 
-** Simulation
+# Simulation
 
 Various methods were implemented to assist in tuning the PID parameters of the system, but it was determined that a starting point should be manually resolved. Through multiple simulations, parameters were chosen that allowed the system to traverse multiple laps around the track without leaving the road surface.
 
@@ -140,7 +140,7 @@ The final parameters were:
  - P: 0.165, I: 0.039, D: 0.225
  - Notes: Finds lane center well but tends to oscillate around zero error, has frequent high angle (and high jerk) steering movements which are ramped out rapidly.
 
-** Potential Improvements
+# Potential Improvements
 
 Since the error reference for the automatic parameter tuning algorithms was based upon a total calculated error over the duration of 1400 updates, the distance that the vehicle travelled in this timeframe was not always identical. This is a result of vehicle instability and associated vehicle speed adjustment. Therefore, the reference lap was not always identical, inducing an additional error into the measurement. If a start/stop waypoint could be established, this may allow for some consistency in error calculated on a per lap basis.
 
