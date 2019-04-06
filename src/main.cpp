@@ -36,46 +36,6 @@ string hasData(string s) {
 }
 
 int main() {
-  // Read gain and setup parameters from csv file
-  /*
-  string line;
-  double p_term = 0.0;
-  double i_term = 0.0;
-  double d_term = 0.0;
-  double max_i_err = 0.0;
-  bool twiddle_active = false;
-  double initial_dp = 0.0;
-  int eval_steps = 0;
-  std::ifstream param_file("pid_params.txt");  
-  if(param_file.is_open()){
-    int line_count = 0;
-    while(getline(param_file, line)){
-      switch(line_count){
-        case 0:
-          p_term = std::stod(line);
-          break;
-        case 1:
-          i_term = std::stod(line);
-          break;
-        case 2:
-          d_term = std::stod(line);
-          break;
-        case 3:
-          max_i_err = std::stod(line);
-          break;
-        case 4:
-          twiddle_active = std::stoi(line);
-          break;
-        case 5:
-          initial_dp = std::stod(line);
-        case 6:
-          eval_steps = std::stoi(line);
-      }
-      line_count += 1;
-    }
-    param_file.close();
-  }
-  */
   
   uWS::Hub h;
 
@@ -83,17 +43,10 @@ int main() {
   /**
    * TODO: Initialize the pid variable.
    */
-  //pid.Init(0.15, 0, 3.0);
-  //pid.Init(0.15, 0.01, 0.15); // This passes
-  //pid.Init(0.10, 0.05, 0.25);
-  
-  //pid.Init(p_term, i_term, d_term, max_i_err, twiddle_active, initial_dp, eval_steps);
   pid.Init();
   
   // Get initial time to base d term delta time on
   time_point<Clock> previous_message_time = Clock::now();
-  
-  //int message_counter = 0;
   
   h.onMessage([&pid,&previous_message_time](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
@@ -121,8 +74,6 @@ int main() {
            *   Maybe use another PID controller to control the speed!
            */
           
-          //message_counter += 1;          
-          
           // Calculate delta time parameter to divide derivative error by
           time_point<Clock> current_message_time = Clock::now();
           double time_between_messages = duration<double, std::milli>(current_message_time - previous_message_time).count();
@@ -130,10 +81,6 @@ int main() {
 
           pid.UpdateError(cte, time_between_messages, speed);
           
-          // Limit the message count and reset to zero
-          //message_counter = message_counter % 10000;
-          
-          //steer_value = angle + pid.TotalError();
           steer_value = pid.TotalError();
           if (steer_value > 1.0){
             steer_value = 1.0;

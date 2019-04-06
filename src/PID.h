@@ -67,6 +67,7 @@ class PID {
   double initial_dp_p;
   double initial_dp_d;
   double initial_dp_i;
+  int last_change;
   
 };
 
