@@ -132,17 +132,17 @@ The final parameters were:
 <strong>Manually Tuned:</strong>
  - P: 0.090, I: 0.009, D: 0.100
  - Notes: Smoother steering, tends to drive towards the outside edge of the lane on turn entry, lower peak steering angles
- - <a href="https://youtu.be/WKMEaLVensk">Manual PID Tuning Video</a>
+ - <a href="https://youtu.be/WKMEaLVensk" target="_blank">Manual PID Tuning Video</a>
 
 <strong>Twiddle:</strong>
  - P: 0.313866, I: 0.0194341, D: 0.29289
  - Notes: Finds lane center better than the manual parameters, but steering movements are frequent and have high jerk
- - <a href="https://youtu.be/yG-HmX39nh4">Twiddle Video</a>
+ - <a href="https://youtu.be/yG-HmX39nh4" target="_blank">Twiddle Video</a>
 
 <strong>Algorithm B:</strong>
  - P: 0.165, I: 0.039, D: 0.225
  - Notes: Finds lane center well but tends to oscillate around zero error, has frequent high angle (and high jerk) steering movements which are ramped out rapidly
- - <a href="https://youtu.be/5NgAi74wd10">Algorithm B Video</a>
+ - <a href="https://youtu.be/5NgAi74wd10" target="_blank">Algorithm B Video</a>
 
 ### Potential Improvements
 
