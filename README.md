@@ -113,3 +113,7 @@ Since the error reference for the automatic parameter tuning algorithms was base
 Add throttle control to decrease the vehicle speed as error increases. This may help stabilize the steering PID controller.
 
 Add adjustable gain parameters to account for vehicle speed as tire related vehicle dynamics (i.e. slip angles) will change with velocity and turning angle.
+
+## License
+
+The content of this repository is licensed under an <a href="https://choosealicense.com/licenses/mit">MIT License</a>.
